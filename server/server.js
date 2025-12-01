@@ -19,7 +19,6 @@ app.use(cors({
 app.use(express.json())
 
 // Create email transporter
-// Create email transporter
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
@@ -30,7 +29,11 @@ const transporter = nodemailer.createTransport({
   },
   connectionTimeout: 10000, // 10 seconds
   greetingTimeout: 10000,
-  socketTimeout: 10000
+  socketTimeout: 10000,
+  // Force IPv4 to avoid IPv6 timeouts on Render
+  family: 4,
+  logger: true,
+  debug: true
 })
 
 // Verify transporter configuration
