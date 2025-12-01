@@ -1,58 +1,36 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 
-dotenv.config()
-
-const app = express()
-const PORT = process.env.PORT || 3002
-
-// Determine CORS origin based on environment
-const CORS_ORIGIN = process.env.FRONTEND_URL || 'http://localhost:5173'
-
-// Middleware
-app.use(cors({
-  origin: CORS_ORIGIN,
-  credentials: true
-}))
-app.use(express.json())
-
-// Create email transporter
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: process.env.EMAIL_PORT == 465, // true for 465, false for other ports
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  },
-  connectionTimeout: 10000, // 10 seconds
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-  // Force IPv4 to avoid IPv6 timeouts on Render
-  family: 4,
-  logger: true,
-  debug: true
-})
-
-// Verify transporter configuration
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('❌ Email transporter error:', error)
-  } else {
-    console.log('✅ Email server is ready to send messages')
+export const handler = async (event, context) => {
+  // CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Credentials': 'true',
+    'Content-Type': 'application/json'
   }
-})
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' })
-})
+  // Handle preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    }
+  }
+//https://pizza-management-backend.vercel.app
+  // Only allow POST
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    }
+  }
 
-// Send order emails endpoint
-app.post('/api/send-order-emails', async (req, res) => {
   try {
+    const body = JSON.parse(event.body)
+    
     const {
       customer_name,
       customer_email,
@@ -69,20 +47,34 @@ app.post('/api/send-order-emails', async (req, res) => {
       payment_status,
       notes,
       estimated_delivery_time = '40-50'
-    } = req.body
-
-    // Calculate delivery fee if not provided (for backwards compatibility)
-    const actualDeliveryFee = delivery_fee !== undefined ? delivery_fee : (total_amount - subtotal)
+    } = body
 
     // Validate required fields
     if (!customer_email || !customer_name || !items) {
-      return res.status(400).json({
-        error: 'Missing required fields',
-        required: ['customer_email', 'customer_name', 'items']
-      })
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          error: 'Missing required fields',
+          required: ['customer_email', 'customer_name', 'items']
+        })
+      }
     }
 
-    // Format items list for email
+    const actualDeliveryFee = delivery_fee !== undefined ? delivery_fee : (total_amount - subtotal)
+
+    // Create transporter
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: parseInt(process.env.EMAIL_PORT),
+      secure: process.env.EMAIL_PORT == 465,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    })
+
+    // Format items list
     const itemsList = items
       .map(item => {
         let itemStr = `${item.quantity}x ${item.name} (${item.size.name})`
@@ -239,27 +231,25 @@ app.post('/api/send-order-emails', async (req, res) => {
 
     console.log(`✅ Order emails sent successfully for order #${order_number}`)
 
-    res.json({
-      success: true,
-      message: 'Order emails sent successfully'
-    })
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        success: true,
+        message: 'Order emails sent successfully'
+      })
+    }
 
   } catch (error) {
     console.error('❌ Error sending order emails:', error)
-    res.status(500).json({
-      error: 'Failed to send emails',
-      details: error.message
-    })
+    
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
+        error: 'Failed to send emails',
+        details: error.message
+      })
+    }
   }
-})
-
-// Start server (only if not running on Vercel)
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`)
-    console.log(`📧 Email service configured for: ${process.env.EMAIL_USER}`)
-  })
 }
-
-// Export for Vercel
-export default app
