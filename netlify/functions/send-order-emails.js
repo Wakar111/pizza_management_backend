@@ -1,9 +1,21 @@
 import nodemailer from 'nodemailer'
 
 export const handler = async (event, context) => {
-  // CORS headers
+  // Allowed origins for CORS
+  const allowedOrigins = [
+    process.env.FRONTEND_URL, // Production URL from env
+    'http://localhost:3001'  // Vite dev server
+  ].filter(Boolean) // Remove any undefined/null values
+
+  // Get the origin from the request
+  const requestOrigin = event.headers.origin || event.headers.Origin
+
+  // Check if the origin is allowed
+  const isAllowedOrigin = allowedOrigins.includes(requestOrigin)
+
+  // CORS headers - dynamically set the origin
   const headers = {
-    'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+    'Access-Control-Allow-Origin': isAllowedOrigin ? requestOrigin : allowedOrigins[0],
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Credentials': 'true',
@@ -18,7 +30,7 @@ export const handler = async (event, context) => {
       body: ''
     }
   }
-//https://pizza-management-backend.vercel.app
+
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
