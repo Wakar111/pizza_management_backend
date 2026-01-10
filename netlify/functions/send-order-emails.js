@@ -36,7 +36,8 @@ export const handler = async (event, context) => {
       payment_method,
       payment_status,
       notes,
-      estimated_delivery_time = '40-50'
+      estimated_delivery_time = '40-50',
+      order_type = 'delivery'
     } = body
 
     // Validate required fields
@@ -96,7 +97,8 @@ export const handler = async (event, context) => {
         payment_method,
         payment_status,
         notes,
-        estimated_delivery_time
+        estimated_delivery_time,
+        order_type
       })
     }
 
@@ -120,7 +122,8 @@ export const handler = async (event, context) => {
         payment_method,
         payment_status,
         notes,
-        estimated_delivery_time
+        estimated_delivery_time,
+        order_type
       })
     }
 
