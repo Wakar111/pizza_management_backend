@@ -20,8 +20,8 @@ export function generateOwnerOrderEmail({
   estimated_delivery_time
 }) {
   const paymentMethodText = payment_method === 'cash'
-    ? 'Barzahlung bei Lieferung'
-    : 'PayPal (Bereits bezahlt)';
+    ? 'Barzahlung bei Übergabe'
+    : 'Bereits bezahlt';
 
   const paymentStatusText = payment_status === 'paid'
     ? '✅ Bezahlt'
@@ -71,7 +71,7 @@ export function generateOwnerOrderEmail({
             <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <h3 style="color: #1f2937; margin-top: 0;">Zahlungsinformationen</h3>
               <p style="margin: 5px 0;"><strong>Zahlungsmethode:</strong> ${paymentMethodText}</p>
-              <p style="margin: 5px 0;"><strong>Zahlungsstatus:</strong> <span style="color: ${payment_status === 'paid' ? '#059669' : '#f59e0b'}; font-weight: bold;">${payment_status === 'paid' ? 'BEZAHLT ✓' : 'AUSSTEHEND'}</span></p>
+              <p style="margin: 5px 0;"><strong>Zahlungsstatus:</strong> ${paymentStatusText}</p>
             </div>
             
             ${notes ? `

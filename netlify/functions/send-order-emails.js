@@ -94,6 +94,7 @@ export const handler = async (event, context) => {
         customer_address,
         customer_phone,
         payment_method,
+        payment_status,
         notes,
         estimated_delivery_time
       })

@@ -14,12 +14,17 @@ export function generateCustomerOrderEmail({
   customer_address,
   customer_phone,
   payment_method,
+  payment_status,
   notes,
   estimated_delivery_time
 }) {
   const paymentMethodText = payment_method === 'cash'
-    ? 'Barzahlung bei Lieferung'
-    : 'PayPal (Bereits bezahlt)';
+    ? 'Barzahlung bei Übergabe'
+    : 'Bereits bezahlt';
+
+    const paymentStatusText = payment_status === 'paid'
+    ? '✅ Bezahlt'
+    : '⏳ Ausstehend';
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -62,6 +67,7 @@ export function generateCustomerOrderEmail({
         
         <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 5px 0;"><strong>Zahlungsmethode:</strong> ${paymentMethodText}</p>
+          <p style="margin: 5px 0;"><strong>Zahlungsstatus:</strong> ${paymentStatusText}</p>
           ${notes ? `<p style="margin: 15px 0 5px 0;"><strong>Anmerkungen:</strong></p><p style="margin: 5px 0; font-style: italic;">${notes}</p>` : ''}
         </div>
         
