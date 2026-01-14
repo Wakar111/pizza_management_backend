@@ -1,5 +1,6 @@
 export const allowedOrigins = [
   process.env.FRONTEND_URL,
+  'https://crusty-pizzas.netlify.app',
   'http://localhost:3001',
 ].filter(Boolean)
 
