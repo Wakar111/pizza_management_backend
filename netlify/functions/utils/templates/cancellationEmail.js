@@ -15,7 +15,7 @@ export function generateCancellationEmail({
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); padding: 30px; text-align: center;">
-        <h1 style="color: white; margin: 0;">Restaurant Hot Pizza</h1>
+        <h1 style="color: white; margin: 0;">Restaurant Crusty Pizza</h1>
       </div>
       
       <div style="padding: 30px; background-color: #f9fafb;">
@@ -59,7 +59,7 @@ export function generateCancellationEmail({
         
         <div style="margin-top: 30px; text-align: center; color: #6b7280; font-size: 14px;">
           <p>Vielen Dank für Ihr Verständnis!</p>
-          <p style="margin-top: 10px;">Restaurant Hot Pizza Team</p>
+          <p style="margin-top: 10px;">Restaurant Crusty Pizza Team</p>
         </div>
       </div>
     </div>

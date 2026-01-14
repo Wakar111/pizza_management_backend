@@ -19,7 +19,7 @@ export const handler = async (event, context) => {
 
   try {
     // Restaurant contact info
-    const restaurantPhone = process.env.RESTAURANT_PHONE || '+49 30 12345678'
+    const restaurantPhone = process.env.RESTAURANT_PHONE || '06022 2656947'
 
     // Parse request body
     const body = JSON.parse(event.body)

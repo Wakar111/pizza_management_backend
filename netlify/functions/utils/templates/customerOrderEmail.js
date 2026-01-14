@@ -30,12 +30,12 @@ export function generateCustomerOrderEmail({
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 30px; text-align: center;">
-        <h1 style="color: white; margin: 0;">Restaurant Hot Pizza</h1>
+        <h1 style="color: white; margin: 0;">Restaurant Crusty Pizza</h1>
       </div>
       
       <div style="padding: 30px; background-color: #f9fafb;">
         <h2 style="color: #1f2937;">Hallo ${customer_name},</h2>
-        <p style="color: #4b5563; font-size: 16px;">vielen Dank für Ihre Bestellung bei Restaurant Hot Pizza!</p>
+        <p style="color: #4b5563; font-size: 16px;">vielen Dank für Ihre Bestellung bei Restaurant Crusty Pizza!</p>
         
         <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="color: #f97316; margin-top: 0;">Bestelldetails</h3>
