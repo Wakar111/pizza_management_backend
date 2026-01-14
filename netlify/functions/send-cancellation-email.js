@@ -71,9 +71,9 @@ export const handler = async (event, context) => {
 
     // Customer cancellation email
     const customerMailOptions = {
-      from: `"Restaurant Hot Pizza" <${process.env.EMAIL_USER}>`,
+      from: `"Restaurant Crusty Pizza" <${process.env.EMAIL_USER}>`,
       to: customer_email,
-      subject: `Bestellung abgelehnt - Restaurant Hot Pizza - Bestellnummer ${order_number || 'N/A'}`,
+      subject: `Bestellung abgelehnt - Restaurant Crusty Pizza - Bestellnummer ${order_number || 'N/A'}`,
       html: generateCancellationEmail({
         customer_name,
         order_number,

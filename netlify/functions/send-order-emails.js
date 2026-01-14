@@ -80,7 +80,7 @@ export const handler = async (event, context) => {
 
     // Customer email
     const customerMailOptions = {
-      from: `"Restaurant Hot Pizza" <${process.env.EMAIL_USER}>`,
+      from: `"Restaurant Crusty Pizza" <${process.env.EMAIL_USER}>`,
       to: customer_email,
       subject: `Ihre Bestellung bei Restaurant Hot Pizza - Bestellnummer ${order_number || 'N/A'}`,
       html: generateCustomerOrderEmail({
@@ -104,7 +104,7 @@ export const handler = async (event, context) => {
 
     // Owner email
     const ownerMailOptions = {
-      from: `"Restaurant Hunger System" <${process.env.EMAIL_USER}>`,
+      from: `"Restaurant Crusty Pizza" <${process.env.EMAIL_USER}>`,
       to: process.env.OWNER_EMAIL,
       subject: `🔔 Neue Bestellung - ${order_number || 'N/A'} - ${customer_name}`,
       html: generateOwnerOrderEmail({
